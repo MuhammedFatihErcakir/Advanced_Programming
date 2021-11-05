@@ -46,9 +46,9 @@
 "use strict";
 const RDR = new FileReader();
 function displayURL(u) {
-    fetch(u).then(console.log) //call r.blob()
+    fetch(u).then(r => r.blob()) //call r.blob()
             .then(displayBlob)
-            .catch(console.error)
+            .catch(disp1.innerText = err)
 }
 function displayBlob(f) {
     console.assert(f instanceof Blob)
@@ -56,10 +56,10 @@ function displayBlob(f) {
     disp1.innerText = ""; disp2.src = ""
     if (f.type.startsWith("image")) {
         RDR.readAsDataURL(f); //display image
-        RDR.onload = () => console.log(f, RDR)
+        RDR.onload = () => disp2.src = RDR.result
     } else if (f.type.startsWith("text")) {
         RDR.readAsText(f);  //display text
-        RDR.onload = () => console.log(f, RDR)
+        RDR.onload = () => disp1.innerText = RDR.result
     } else {
         msg.innerText += " -- Unknown"
     }
