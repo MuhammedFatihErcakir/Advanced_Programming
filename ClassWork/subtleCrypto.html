@@ -29,8 +29,8 @@
 
 <div>
   URL: 
-  <input type=text id=remote onchange='displayURL(this.value)'> <br>
-  <input type=file id=button onChange='displayBlob(this.files[0])'>
+  <input type=text id=remote onchange='shaFromURL(this.value)'> <br>
+  <input type=file id=button onChange='shaFromBuffer(this.files[0])'>
 </div>
 <div id=msg>Select text or image </div>
 <pre id=disp1></pre> <img id=disp2 />
@@ -48,7 +48,7 @@ const RDR = new FileReader();
 
 function shaFromBuffer(buf) { //ArrayBuffer or ArrayBufferView
     crypto.subtle.digest(MENU.algorithm, buf)
-      .then(b => display(MENU.bufferToHex(b)))
+      .then(b => console.log(bufferToHex(b)))
       .catch(console.error)
 }
 
