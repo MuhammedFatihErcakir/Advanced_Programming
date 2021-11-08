@@ -47,7 +47,7 @@ function init() {
 function check() {
 //complete the code below
     fetch(url.value).then(r => 
-      resp.innerText = r.ok? 'OK' : 'xxx'+ e.toString()
+      resp.innerText = r.ok? 'OK' : 'xxx'
     ).catch(e => 
       resp.innerText = 'ERROR!: ' +e.toString()
     )
