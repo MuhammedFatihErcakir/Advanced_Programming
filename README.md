@@ -1,3 +1,3 @@
 # Advanced_Programming
 
-Advanced Programming Dersi JavaScript Repositories 
+Advanced Programming Lesson's JavaScript Repositories  
