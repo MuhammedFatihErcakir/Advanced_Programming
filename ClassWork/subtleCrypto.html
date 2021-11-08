@@ -47,8 +47,8 @@
 const RDR = new FileReader();
 
 function shaFromBuffer(buf) { //ArrayBuffer or ArrayBufferView
-    crypto.subtle.digest(MENU.algorithm, buf)
-      .then(b => console.log(bufferToHex(b)))
+  crypto.subtle.digest(SubtleCrypto.algorithm, buf)
+      .then(b => console.log(SubtleCrypto.bufferToHex(b)))
       .catch(console.error)
 }
 
@@ -65,6 +65,23 @@ function shaFromURL(u) { //URL or string
 function bufferToHex(buf) {
     return [...new Uint8Array(buf)].map(toHex).join('')
   }
+
+let readr = new FileReader();
+
+function fileSelect(f){
+  if(f.files && f.files[0]){
+    readr.readAsText(f.files[0]);
+  }
+} 
+
+let a,b,c,d;
+
+let CL = console.log
+let M = "küçük şeyler güzeldir",
+  toHex = b => b.toString(16).padStart(2,'0'),
+  subtle = crypto.subtle,
+  TEXT = 'const M = "'+M+'",\n toHex= '+toHex
+
 
 
 title.innerText = document.title
