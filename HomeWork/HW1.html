@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Exponentiation Table</title>
+
+  <style>
+    body { max-width: 440px; }
+    pre  { overflow-x: auto; }
+    input { width: 50px }
+  </style>
+</head>
+
+<body>
+
+<h2 id=title></h2>
+x = <input type=number id=ex value=0 onChange="calculate()">
+&emsp;
+y = <input type=number id=lam value=1 onChange="calculate()">
+&emsp;
+<span id=res></span>
+<pre id=out><b>Table</b></pre>
+
+<hr />
+<b>Sample code</b>
+<pre id=sample></pre>
+
+<hr />
+<p>Ref: <a href="https://onlinemschool.com/math/formula/order_table/" 
+   target="NewTab">Exponentiation Table</a>
+</p>
+
+<script>
+"use strict";
+function Exponentiation(x, y) {
+    return x**y
+}
+function calculate() {
+    let x = Number(ex.value)
+    if (!Number.isInteger(x)) {
+       x = Math.round(x); ex.value = x
+    }
+    let y = Number(lam.value)
+    res.innerText = "P(x, y) = "+Exponentiation(x, y)
+}
+function doTable() {
+    const L = [1, 2, 3, 4, 5]
+    let a = L.map((y) => 'y='+y)
+    let str = header(a)
+    for (let x=1; x<=5; x++) { 
+       let a = L.map((y) => Exponentiation(x, y))
+       str += oneLine(a, x)
+    }
+    return str
+}
+let header  = (a) => '     '+ a.join('  ')  //pre
+let oneLine = (a, x) => '\nx='+x+'   '+ a.join('    ')
+    
+    title.innerText = document.title
+    sample.innerText = Exponentiation+'\n'+doTable
+    calculate()
+    out.innerText = doTable()
+</script>
+
+</body>
+</html>
