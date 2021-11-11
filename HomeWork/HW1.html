@@ -45,10 +45,10 @@ function calculate() {
     res.innerText = "P(x, y) = "+Exponentiation(x, y)
 }
 function doTable() {
-    const L = [1, 2, 3, 4, 5]
+    const L = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     let a = L.map((y) => 'y='+y)
     let str = header(a)
-    for (let x=1; x<=5; x++) { 
+    for (let x=1; x<=10; x++) { 
        let a = L.map((y) => Exponentiation(x, y))
        str += oneLine(a, x)
     }
