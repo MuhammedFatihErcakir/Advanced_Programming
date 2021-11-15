@@ -17,21 +17,21 @@ function tableFor(evt) {
 
 function analyze(min=0) {
   let a = [];
-  let counter = 0;
   for (let evt of EVENTS) {
-    let cor = phi(tableFor(evt));
-    if (Math.abs(cor) > min){
-    counter = 0;}
+    let count = 0;
     for(let entry of JOURNAL){
       if (entry.events.includes(evt)){
-        counter += 1;
+      count++;
       }
-      a.push(evt +": "+cor.toFixed(4) + "  " + counter);
     }
-      
+      let cor = phi(tableFor(evt));
+    if (Math.abs(cor) > min)
+    a.push(evt +": "+cor.toFixed(4) + "  " + count);
+    }
+    return a
   }
-  return a
-}
+  
+
 
 function journalEvents() {
   EVENTS.clear();
