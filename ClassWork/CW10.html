@@ -63,21 +63,21 @@ function init() {
 
   // Online Status
   online.innerText = navigator.onLine ? "Connected -- Online" : "Disconnected -- Offline";
-      window.addEventListener('online', event => {
+      window.addEventListener('online', e => {
         online.innerText = "Connected -- Online";
       }, false);
   
-      window.addEventListener('offline', event => {
+      window.addEventListener('offline', e => {
         online.innerText = "Disconnected -- Offline";
       }, false);    
   
   //Keyboard Events
-  window.addEventListener("keydown", event => {
-      keyboard.innerText = event.key
+  window.addEventListener("keydown", e => {
+      keyboard.innerText = e.key
     });
 
-  window.addEventListener("keyup", event => {
-      keyboard.innerText = event.key
+  window.addEventListener("keyup", e => {
+      keyboard.innerText = e.key
     });
 
 
