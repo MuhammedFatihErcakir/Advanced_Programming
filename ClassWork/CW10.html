@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="icon192.png">
+    <title>Event Listeners </title>
+
+  <style> /* CSS comment */
+    body { max-width: 400px; }
+    #url { width: 190px; }
+    span, #url { color: rgb(6, 97, 6); }
+  </style>
+</head>
+
+<body>
+
+<h2 id=title title="Event listeners"></h2>
+  
+<h2>Battery Status</h2>
+  <p title="Battery level">
+    Battery level: <span id=level>??</span>
+  </p>
+  <p>
+    Charge Status : <span id=charge></span>
+  </p>
+  <p>
+    Charge Level Changes : <span id=levelChange></span>
+  </p>
+
+<h2>Online Status</h2>
+  <p>
+    <span id=online></span>
+  </p>
+
+<h2>Keyboard</h2>
+  <p>
+    Key : <span id=keyboard></span>
+  </p>
+
+
+<hr />
+<b>Sample code</b>
+<pre id=sample>This text is not shown. Why?</pre>
+
+<hr />
+
+<script>
+"use strict";
+function init() {
+  // Battery Level
+  navigator.getBattery().then(b => level.innerText = '%' + b.level * 100)
+  
+  //Charge Status
+  navigator.getBattery().then(b =>
+        b.onchargingchange = () => charge.innerText = (b.charging ? "Charging" : "Discharging")
+      )
+  
+  //Charge Level Changes
+  navigator.getBattery().then(b =>
+        b.onlevelchange = () => levelChange.innerText = '%' + b.level * 100
+      )
+
+  // Online Status
+  online.innerText = navigator.onLine ? "Connected -- Online" : "Disconnected -- Offline";
+      window.addEventListener('online', event => {
+        online.innerText = "Connected -- Online";
+      }, false);
+  
+      window.addEventListener('offline', event => {
+        online.innerText = "Disconnected -- Offline";
+      }, false);    
+  
+  //Keyboard Events
+  window.addEventListener("keydown", event => {
+      keyboard.innerText = event.key
+    });
+
+  window.addEventListener("keyup", event => {
+      keyboard.innerText = event.key
+    });
+
+
+}
+
+    title.innerText = document.title;
+    sample.innerText = init;
+    init();
+</script>
+
+</body>
+</html>
