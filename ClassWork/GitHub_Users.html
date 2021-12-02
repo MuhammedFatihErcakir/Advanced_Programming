@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" href="github.png">
+  <title>GitHub Users</title>
+  <style>
+    body {
+        max-width: 400px;
+    }
+    img {
+        padding-right: 100px; 
+        width: 300px;
+        float: left;
+    }
+    pre { overflow-x: auto; }
+    #out { color: coral; }
+  </style>
+</head>
+
+<body>
+
+<h2 id=title></h2>
+<input type=text id=usr value=muhammedfatihercakir onChange="readUser()">
+<p id=out>Reading data</p>
+<hr />
+<b>Sample code</b>
+<pre id=sample></pre>
+<hr />
+<p>Ref: 
+  <a href="https://docs.github.com/en/rest/reference/rate-limit" target=NewTab>GitHub API</a> &emsp;
+  <a href="await.html" target=NewTab>await</a>
+</p>
+
+<script>
+"use strict";
+function error(e) {
+    out.innerText = e
+    out.style.color = 'red'
+    console.error(e)
+}
+function cause(s) {
+  switch (s) {
+    case 403:
+      return 'Rate limit exceeded'
+    case 404:
+      return usr.value+' not found'
+    default:
+      return 'Status '+s
+  }
+}
+async function toJSON(url) {
+  try {
+    let r = await fetch(url)
+    if (!r.ok) throw cause(r.status)
+    return r.json()
+  } catch (e) {
+    error(e)
+  }
+}
+async function readUser() {
+    const URL = "https://api.github.com/users/"
+    const BR = '<BR>'
+    let u = await toJSON(URL+usr.value)
+    if (!u || !u.login) return
+    out.style.color = ''
+    
+    //start with avatar
+    out.innerHTML = `<img src="${u.avatar_url}">`
+    
+    //add company
+    let s4 = (u.company? u.company: u.login)
+    if (u.company) s4 =u.company
+	  let a5 = document.createElement("a5") 
+	  a5.innerText = "\n"+s4+"\n"
+	  out.appendChild(a5)
+
+    //add name and location
+    let s = (u.name || u.login)
+    if (u.location) s += ', '+u.location
+    out.innerHTML += s+BR; console.log(s)
+    
+    //add link to GitHub 
+    let h = "github.com/"+u.login
+    out.innerHTML += 
+    `<a href="https://${h}" target=NewTab>${h}</a>`
+    
+    //add repo count and repo names
+    let n = u.public_repos
+    out.innerHTML += BR+`Public Repos: ${n}`+BR
+
+    //add followers
+    out.innerHTML += " Followers: "+ u.followers+BR
+
+
+}
+    title.innerText = document.title
+    sample.innerText = toJSON +'\n'+ readUser
+    readUser()
+</script>
+<script src="../navbar.js"></script>
+
+</body>
+</html>
