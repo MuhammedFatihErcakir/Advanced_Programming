@@ -1,13 +1,15 @@
+
+  
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
-  <link rel="icon" href="havadurumu.jpg">
+  <link rel="icon" href="icon192.png">
   <title>Open Weather</title>
   <style>
     body {
-        max-width: 450px;
+        max-width: 420px;
         margin: 0;
     }
     div {
@@ -15,25 +17,23 @@
         margin: 12px;
         vertical-align: top;
     }
-    pre {
-        overflow-x: auto;
-    }
-
     p { margin: 0; }
     b { font-size: 18px; }
-    pre {
-        overflow-x: auto;
-        font-size: 14px;
-    }
+    pre { font-size: 14px; }
     .dar { width: 42%; }
     #main {
         box-sizing: border-box;
         width: 100%;
         padding: 20px;
         text-align: center;    
-        background: rgb(0, 247, 255);
+        background: #9cf;
         font-size: 24px;
         margin: 0;
+    } 
+    #map {
+        height:500px; width:420px;
+        box-sizing: border-box;
+        border: 0;
     }
     #yer { margin: 10px; }
     #err { color:red }
@@ -41,18 +41,18 @@
 </head>
 
 <body>
-<div>
-  Lat/Lon <input id=mahal type=text value="41 29">
-</div>
-
-
-  
-
+    <div>
+        Location 
+        <input type="number" id="lat" placeholder="" style="width: 100px;height: 20px;" value="41.09924118829392">
+        <input type="number" id="lon" placeholder="" style="width: 100px;height: 20px;" value="28.868741886402606">
+        <button onclick="askWeather()"> Weather </button>
+    </div>
 <div id=main>
 <p id=yer>location</p>
 <p><img id=icon>
 <span id=hava>weather</span></p>
 </div>
+
 <div class=dar>
   <b>Detail</b>
   <pre id=detay>detail</pre>
@@ -63,37 +63,38 @@
 </div>
 <hr />
 <div>
+    <div id=one>
+        <input id=but type=button value="Run" onClick="start()"> &emsp;
+        Zoom = <span id=out></span>
+        <!-- <input type=checkbox onClick="mapType(checked)">Satellite -->
+    </div>
+    <hr />
+    <div id=map></div>
+    <hr />
+    <div id=two>
+        </p>
+        
+    </div>
 <p id=err>You need an API key for openweathermap.org 
   <a href="https://openweathermap.org/appid" 
    target="NewTab">here</a> 
 </p>
-</div>
 
-<div id=one>
-    <h2 id=title></h2>
-    <input id=but type=button value="Run" onClick="start()"> &emsp;
-    Zoom = <span id=out></span>
+</p>
 </div>
-<div id=map style="position: relative;width: 500px;height: 500px;"></div>
-<div id=two>
-    
-</div>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
 <!-- Make sure you put JS AFTER CSS -->
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
 <script>
 "use strict";
-
-
-
-function toHM(t) { // t in seconds -- convert to minutes
-    //number of hours since midnight, in local time
-    let h = (t%86400)/3600  // 0<=h<24
-    let m = (h%1)*60        // 0<=m<60
-    let twoDigits = t => (t<10? '0' : '')+Math.trunc(t)
-    return twoDigits(h)+":"+twoDigits(m+0.5) //round
+function toHM(t, round) {
+    let d = t ? new Date(t*1000) : new Date()
+    if (round && d.getSeconds()>29)
+        d = new Date((t+30)*1000) //round
+    let h = d.getHours()
+    let m = d.getMinutes()
+    let twoDigits = t => (t>9? '' : '0')+t
+    return twoDigits(h)+":"+twoDigits(m)
 }
 async function toJSON(url) {
     let r = await fetch(url)
@@ -127,38 +128,37 @@ function getLocation1(p) { //Accurate
 // Weather
 var accessKey;
 async function askWeather() {
-    console.log(lat, lon); 
+    lat = document.querySelector("#lat").value
+    lon = document.querySelector("#lon").value
+    
     const U = "https://api.openweathermap.org/data/2.5/weather?"
     let url = U+"lat="+lat+"&lon="+lon+"&APPID="+accessKey;
     hava.innerText = "getting weather"
     detay.innerText = ''
     gunes.innerText = ''
-    let data = await toJSON(url)
-//  fetch(url).then(r => r.json()).then(showWeather)
-// }
-// function showWeather(data) {
+   let data = await toJSON(url)
+    showWeather(data)
+    setLoc(lat,lon)
+ }
+ function showWeather(data) {
     let w = data.weather[0]; showIcon(w.icon)
     let celsius = convert(data.main.temp).toFixed(0)
     let hh = w.main+"  "+celsius+"°", {sys} = data
     let yy = data.name+', '+sys.country
     hava.innerText = hh; yer.innerText = yy
+    console.log(hh, yy); console.log(sys)
     lat = data.coord.lat; lon = data.coord.lon
-    mahal.value = lat.toFixed(2)+", "+lon.toFixed(2)
-    let wind = (3.6*data.wind.speed).toFixed(0)
-    let pres = (0.750062*data.main.pressure).toFixed(0)
-    const WIND = ['N','NE','E','SE','S','SW','W','NW','N']
-    let d = (data.wind.deg/45).toFixed(0)
-    detay.innerText = hh  //+'\n'+yy +'\n['+mahal.value+"]"
-        +'\nWind  '+wind+' km/h '+WIND[d]
-        +'\nPressure  '+pres+' mm'
-        +'\nHumidity  %'+data.main.humidity
+    let loc = "["+lat.toFixed(2)+", "+lon.toFixed(2)+"]"
+    detay.innerText = hh+'\n'+yy+'\n'+loc
+        +'\nLat ' + lat 
+        +'\nLon ' + lon
+        +'\nWind  '+data.wind.speed * 3.6+' kph'
+        +'\nWind Direction ' + data.wind.deg
+        +'\nPressure '+data.main.pressure+' hpa'
+        +'\nHumidity '+data.main.humidity+'%'
     let {sunrise, sunset} = sys, noon = (sunrise+sunset)/2
-    gunes.innerText = 'Rise '+toHM(sunrise+data.timezone)
-        +'\nNoon '+toHM(noon+data.timezone)
-        +'\nSet  '+toHM(sunset+data.timezone)
-        +'\nZone '+(data.timezone/3600)
-    console.log(hh, yy, 'Wind '+data.wind.deg+'° '+WIND[d])
-    
+    gunes.innerText = 'Rise '+toHM(sunrise, 1)
+        +'\nNoon '+toHM(noon, 1)+'\nSet  '+toHM(sunset, 1)
 }
 function showIcon(i) {
     const URL = "https://openweathermap.org/img/w/"
@@ -194,48 +194,31 @@ function getAPIkey() {
         accessKey = askUser()
     }
 }
-    err.style.display = "none"
-    getAPIkey(); askLocation()
-mahal.onkeyup = e => {
-  let t = e.target
-  if (e.keyCode === 13) {
-    [lat, lon] = mahal.value.split(/[ ,]+/)
-    askWeather()
-  }
-  if (e.keyCode === 27) t.blur()
-}
-"use strict"
-var MAP //global
-function init(){
-    let p = {lat:41.099306, lng:28.868702}
+var MAP
+function init() {
+    //initial coordinates are given: 50. Yil Parki
+    let p = {lat:40.970021, lng:29.057876}
+    console.log('init at', p)
+    //L is global object from leaflet
     MAP = L.map('map').setView(p, 10)  //setZoom(10)
     let u = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     let attribution = '&copy; OpenStreetMap contributors'
     L.tileLayer(u, {attribution}).addTo(MAP)
+
     let report = () => out.innerText = MAP.getZoom()
     MAP.on('zoom', report); report()
-    MAP.on('click', e => { 
+    MAP.on('click', e => {
+         
+    p = {lat: e.latlng.lat, lng:e.latlng.lng}
+    document.querySelector("#lat").value = e.latlng.lat
+    document.querySelector("#lon").value = e.latlng.lng
 
+    MAP = MAP.setView(p, 10)  //setZoom(10)
 
-        document.querySelector("#lat").value = e.latlng.lat
-        document.querySelector("#lon").value = e.latlng.lng
-
-        MAP = MAP.setView([e.latlng.lat,e.latlng.lng], 10)  //setZoom(10)
-
-        askWeather()
+    askWeather()
+    console.log(e.latlng)
 
     })
-
-}
-
-function goTo(lat,lon) {
-    
-    let p = {lat:lat, lng:lon}
-    let u = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    MAP = MAP.setView(p, 10)  //setZoom(10)
-    let attribution = '&copy; OpenStreetMap contributors'
-    L.tileLayer(u, {attribution}).addTo(MAP)
-
 }
 var incr = 0;
 function stop() {
@@ -257,10 +240,19 @@ function zoom() {
     if (z <= MIN) incr = 1
     if (z >= MAX) incr = -1
 }
+function setLoc(lat,lon) {
+    
+    let p = {lat:lat, lng:lon}
+    MAP = MAP.setView(p, 10)  //setZoom(10)
+    let u = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    let attribution = '&copy; OpenStreetMap contributors'
+    L.tileLayer(u, {attribution}).addTo(MAP)
+}
 
+    err.style.display = "none"
+    getAPIkey(); askLocation()
+    init()
 </script>
 
 </body>
 </html>
-
-    
