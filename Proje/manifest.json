@@ -1,0 +1,14 @@
+{
+  "name": "Advanced Calculator",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "wheat",
+  "theme-color": "wheat",
+  "icons": [
+    {
+      "src": "images/calculator.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
