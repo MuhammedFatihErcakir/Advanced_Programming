@@ -1,13 +1,13 @@
 function sin(){
-    document.calculator.result.value=Math.sin(document.calculator.result.value)
+    document.calculator.result.value=Math.sin(document.calculator.result.value).toFixed(7);
 }
 
 function cos(){
-    document.calculator.result.value=Math.cos(document.calculator.result.value)
+    document.calculator.result.value=Math.cos(document.calculator.result.value).toFixed(7);
 }
 
 function tan(){
-    document.calculator.result.value=Math.tan(document.calculator.result.value)
+    document.calculator.result.value=Math.tan(document.calculator.result.value).toFixed(7);
 }
 
 function backSpace() {
@@ -16,11 +16,11 @@ function backSpace() {
 }
 
 function square() {
-    document.calculator.result.value = Math.pow(document.calculator.result.value,2);
+    document.calculator.result.value = Math.pow(document.calculator.result.value,2).toFixed(7);
 }
 
 function sqrt() {
-    document.calculator.result.value = Math.sqrt(document.calculator.result.value)
+    document.calculator.result.value = Math.sqrt(document.calculator.result.value).toFixed(7);
 }
 
 function fakt() {
@@ -41,7 +41,7 @@ function remove() {
 }
 
 function equal() {
-    document.calculator.result.value = eval(document.calculator.result.value);
+    document.calculator.result.value = eval(document.calculator.result.value).toFixed(7);
 }
 
 
