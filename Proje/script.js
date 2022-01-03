@@ -16,11 +16,11 @@ function backSpace() {
 }
 
 function square() {
-    document.calculator.result.value = Math.pow(document.calculator.result.value,2).toFixed(7);
+    document.calculator.result.value = Math.pow(document.calculator.result.value,2);
 }
 
 function sqrt() {
-    document.calculator.result.value = Math.sqrt(document.calculator.result.value).toFixed(7);
+    document.calculator.result.value = Math.sqrt(document.calculator.result.value);
 }
 
 function fakt() {
@@ -41,7 +41,7 @@ function remove() {
 }
 
 function equal() {
-    document.calculator.result.value = eval(document.calculator.result.value).toFixed(7);
+    document.calculator.result.value = eval(document.calculator.result.value);
 }
 
 
